@@ -17,6 +17,7 @@ include('includes/SelectModule.php');
 include('includes/SelectMenuOption.php');
 include('includes/FillForm.php');
 include('includes/Asserts.php');
+include('includes/logging.php');
 include('classes/URLDetails.class.php');
 
 ?>

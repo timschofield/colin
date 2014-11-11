@@ -1,11 +1,9 @@
 <?php
 
-function KwaMojaLogIn($CookieFile, $RootPath, $ServerPath, $Company, $UserName, $Password) {
+function KwaMojaLogIn($CookieFile, $RootPath, $ServerPath, $Company, $UserName, $Password, $TestNumber) {
 
-	$LoginScreenDetails = new URLDetails($CookieFile);
-	$LoginScreenDetails->SetURL($RootPath.'index.php');
-	$LoginScreenDetails->SetPostArray(array());
-	$LoginScreenDetails->FetchPage($RootPath, $ServerPath);
+	$LoginScreenDetails = new URLDetails($CookieFile, $RootPath.'index.php', array());
+	$LoginScreenDetails->FetchPage($RootPath, $ServerPath, $TestNumber);
 	$FormDetails = $LoginScreenDetails->GetFormDetails();
 
 	for ($i=0; $i<sizeOf($FormDetails['Selects']['select']['CompanyNameField']['options']); $i++) {
@@ -52,14 +50,16 @@ function KwaMojaLogIn($CookieFile, $RootPath, $ServerPath, $Company, $UserName, 
 		}
 	}
 
-	$IndexScreenDetails = new URLDetails($CookieFile);
-	$IndexScreenDetails->SetURL($RootPath.'index.php');
-	$IndexScreenDetails->SetPostArray($PostArray);
-
-	$IndexPage=$IndexScreenDetails->FetchPage($RootPath, $ServerPath);
+	$IndexScreenDetails = new URLDetails($CookieFile, $RootPath.'index.php', $PostArray);
+	$IndexPage=$IndexScreenDetails->FetchPage($RootPath, $ServerPath, $TestNumber);
 
 
 	return $IndexPage;
+}
+
+function KwaMojaLogout($RootPath, $ServerPath, $CookieFile) {
+	$IndexScreenDetails = new URLDetails($CookieFile, $RootPath.'Logout.php', array());
+	$IndexPage=$IndexScreenDetails->FetchPage($RootPath, $ServerPath, basename(__FILE__, '.php'));
 }
 
 ?>

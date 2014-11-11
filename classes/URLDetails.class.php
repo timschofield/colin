@@ -2,64 +2,17 @@
 
 class URLDetails {
 
-	private $SessionID;
-	private $URL;
-	private $PostArray;
-	private $FormDetails;
+	public $SessionID;
+	public $URL;
+	public $PostArray;
+	public $FormDetails;
 	public $xml;
 	public $Links;
 
-	function __construct($SessionID) {
+	function __construct($SessionID, $URL, $PostArray) {
 		$this->SessionID = $SessionID;
-		$this->PostArray=array();
-	}
-
-	function __destruct() {
-//		return $this->rrmdir('/tmp/'.$this->SessionID);
-		return true;
-	}
-
-	public function GetURL() {
-		return $this->URL;
-	}
-
-	public function SetURL($aURL) {
-		$this->URL = $aURL;
-		return true;
-	}
-
-	public function GetPostArray() {
-		return $this->PostArray;
-	}
-
-	public function SetPostArray($aPostArray) {
-		$this->PostArray = $aPostArray;
-		return true;
-	}
-
-	private function rrmdir($dir) {
-		if (is_dir($dir)) {
-			$objects = scandir($dir);
-			foreach ($objects as $object) {
-				if ($object != "." and $object != "..") {
-					if (filetype($dir."/".$object) == "dir") rrmdir($dir."/".$object); else unlink($dir."/".$object);
-				}
-			}
-			reset($objects);
-			rmdir($dir);
-		} else {
-			return 1;
-		}
-		return 0;
-	}
-
-	public function Save($name) {
-		$fh = fopen('/tmp/'.$this->SessionID.'/'.$name, 'w');
-		fwrite($fh, serialize($this));
-		fclose($fh);
-	}
-
-	public function Load($name) {
+		$this->URL = $URL;
+		$this->PostArray = $PostArray;
 	}
 
 	private function GetTextDetails() {
@@ -73,7 +26,8 @@ class URLDetails {
 					$Texts['text'][$k][$name]=(string)$Result->item($i)->attributes->getNamedItem($name)->nodeValue;
 				}
 				if (!isset($Texts['text'][$k]['maxlength'])) {
-					error_log('**Warning** '.$Texts['text'][$k]['name'].' in '.$this->GetURL().' has no maxlength attribute set.'."\n\n", 3, '/home/tim/kwamoja'.date('Ymd').'.log');
+					error_log('**Warning** '.$Texts['text'][$k]['name'].' in '.$this->URL.' has no maxlength attribute set.'."\n\n", 3, '/home/tim/kwamoja'.date('Ymd').'.log');
+					$Texts['text'][$k]['maxlength'] = 10;
 				}
 				$k++;
 			}
@@ -249,7 +203,7 @@ class URLDetails {
 		$Validator = new XhtmlValidator();
 		$Result=$Validator->validate($html);
 		if($Validator->validate($html) === false){
-			error_log('**Error**'.'There are errors in the XHTML of page '.$this->GetURL()."\n", 3, '/home/tim/kwamoja'.date('Ymd').'.log');
+			error_log('**Error**'.'There are errors in the XHTML of page '.$this->URL."\n", 3, '/home/tim/kwamoja'.date('Ymd').'.log');
 			$Validator->logErrors();
 		}
 		return $Result;
@@ -270,17 +224,23 @@ class URLDetails {
 		}
 	}
 
-	public function FetchPage($RootPath, $ServerPath) {
+	public function CheckForXDebugMessages($HTML, $TestNumber) {
+		if (strstr($HTML, 'xdebug-error')) {
+			LogMessage($TestNumber, 1, 'X-Debug Error message', $HTML);
+		}
+	}
+
+	public function FetchPage($RootPath, $ServerPath, $TestNumber) {
 		$PostString='';
-		foreach($this->GetPostArray() as $Key=>$Value) {
+		foreach($this->PostArray as $Key=>$Value) {
 			$PostString .= $Key.'='.urlencode($Value).'&';
 		}
 		rtrim($PostString,'&');
 
 		if (file_exists($this->SessionID)) {
-			exec('curl -s -b '.$this->SessionID.' -d "' . $PostString . '" "' . $this->GetURL() . '"' , $FormArray);
+			exec('curl -s -b '.$this->SessionID.' -d "' . $PostString . '" "' . $this->URL . '"' , $FormArray);
 		} else {
-			exec('curl -s -c '.$this->SessionID.' -d "' . $PostString . '" "' . $this->GetURL() . '"' , $FormArray);
+			exec('curl -s -c '.$this->SessionID.' -d "' . $PostString . '" "' . $this->URL . '"' , $FormArray);
 		}
 
 		$Result[0] = '<html>';
@@ -288,6 +248,7 @@ class URLDetails {
 			$Result[0] .= $FormArray[$i];
 		}
 
+		$this->CheckForXDebugMessages($Result[0], $TestNumber);
 		$this->xml = new DOMDocument();
 		$this->xml->loadHTML($Result[0]);
 //		$answer = $this->ValidateHTML($Result[0]);
