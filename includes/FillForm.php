@@ -60,6 +60,8 @@ function FillFormWithRandomData($FormDetails) {
 		foreach ($Value as $Field) {
 			if (isset($Field['class']) and $Field['class']=='number') {
 				$PostData[$Field['name']]=RandomNumberString($Field['maxlength']);
+			} else if (isset($Field['class']) and $Field['class']=='integer') {
+				$PostData[$Field['name']]=RandomNumberString($Field['maxlength']);
 			} else if (isset($Field['class']) and $Field['class']=='date') {
 				$PostData[$Field['name']]=RandomDateString('2000-01-01', '2012-12-31');
 			} else if (isset($Field['class']) and $Field['class']=='email') {
