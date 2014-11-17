@@ -1,38 +1,57 @@
 #!/usr/bin/php5
 <?php
+
+$ModuleName = 'Manufacturing';
+$MenuOption = 'Work Centre';
+$TableName = 'workcentres';
+$TestName = 'Work Centre Input Test';
+$FieldNames = array('code'=>'Code',
+					'location'=>'Location',
+					'description'=>'Description',
+					'overheadrecoveryact'=>'OverheadRecoveryAct',
+					'overheadperhour'=>'OverheadPerHour'
+					);
+$IndexField = 'code';
+$IndexFormField = 'Code';
+
 error_reporting(E_ALL && ~E_WARNING);
 include('includes/config.php');
-RegisterTest(basename(__FILE__, '.php'), 'Work Centre Input Test');
+RegisterTest(basename(__FILE__, '.php'), $TestName);
 $CookieFile = sha1(uniqid(mt_rand(), true));
 
 $IndexPage=KwaMojaLogIn($CookieFile, $RootPath, $ServerPath, $CompanyName, $UserName, $Password, basename(__FILE__, '.php'));
 
-$SetupPage=FindModule($RootPath, $ServerPath, $CookieFile, $IndexPage, 'Manufacturing');
+$MenuPage=FindModule($RootPath, $ServerPath, $CookieFile, $IndexPage, $ModuleName);
 
-$WorkCentrePage=ChooseMenuOption($RootPath, $ServerPath, $CookieFile, $SetupPage, 'Work Centre', basename(__FILE__, '.php'));
+$FirstScreen=ChooseMenuOption($RootPath, $ServerPath, $CookieFile, $MenuPage, $MenuOption, basename(__FILE__, '.php'));
 
-$PostData=FillFormWithRandomData($WorkCentrePage[2]);
+$PostData=FillFormWithRandomData($FirstScreen[2]);
 
-$WorkCentreInsertPage = new URLDetails($CookieFile, $ServerPath.$WorkCentrePage[2]['Action'], $PostData);
-$Page=$WorkCentreInsertPage->FetchPage($RootPath, $ServerPath, basename(__FILE__, '.php'));
+$InsertPage = new URLDetails($CookieFile, $ServerPath.$FirstScreen[2]['Action'], $PostData);
+$Page=$InsertPage->FetchPage($RootPath, $ServerPath, basename(__FILE__, '.php'));
 
-$Fields = array('code'=>$PostData['Code'], 'location'=>$PostData['Location'], 'description'=>$PostData['Description'], 'overheadrecoveryact'=>$PostData['OverheadRecoveryAct'], 'overheadperhour'=>$PostData['OverheadPerHour']);
+foreach ($FieldNames as $DBField=>$FormField) {
+	$Fields[$DBField] = $PostData[$FormField];
+}
 
-if (!assertDB('workcentres', $Fields, $PostData, 'inserted', basename(__FILE__, '.php'))) AbortTest($CookieFile, 1);
+if (!assertDB($TableName, $Fields, $PostData, 'inserted', basename(__FILE__, '.php'))) AbortTest($CookieFile, 1);
 
-$EditPage = GetEditPage($Page, $Fields['code'], $RootPath, $ServerPath, $CookieFile, basename(__FILE__, '.php'));
+$EditPage = GetEditPage($Page, $Fields[$IndexField], $RootPath, $ServerPath, $CookieFile, basename(__FILE__, '.php'));
 
 $PostData=FillFormWithRandomData($EditPage[2]);
 
-$WorkCentreUpdatePage = new URLDetails($CookieFile, $ServerPath.$EditPage[2]['Action'], $PostData);
-$Page=$WorkCentreUpdatePage->FetchPage($RootPath, $ServerPath, basename(__FILE__, '.php'));
+$UpdatePage = new URLDetails($CookieFile, $ServerPath.$EditPage[2]['Action'], $PostData);
+$Page=$UpdatePage->FetchPage($RootPath, $ServerPath, basename(__FILE__, '.php'));
 
-$Fields = array('code'=>$PostData['Code'], 'location'=>$PostData['Location'], 'description'=>$PostData['Description'], 'overheadrecoveryact'=>$PostData['OverheadRecoveryAct'], 'overheadperhour'=>$PostData['OverheadPerHour']);
-if (!assertDB('workcentres', $Fields, $PostData, 'updated', basename(__FILE__, '.php'))) AbortTest($CookieFile, 1);
+foreach ($FieldNames as $DBField=>$FormField) {
+	$Fields[$DBField] = $PostData[$FormField];
+}
 
-$DeletePage = GetDeletePage($Page, $PostData['Code'], $RootPath, $ServerPath, $CookieFile, basename(__FILE__, '.php'));
+if (!assertDB($TableName, $Fields, $PostData, 'updated', basename(__FILE__, '.php'))) AbortTest($CookieFile, 1);
 
-if (!assertNotDB('workcentres', $Fields, $PostData, 'deleted', basename(__FILE__, '.php'))) AbortTest($CookieFile, 1);
+$DeletePage = GetDeletePage($Page, $PostData[$IndexFormField], $RootPath, $ServerPath, $CookieFile, basename(__FILE__, '.php'));
+
+if (!assertNotDB($TableName, $Fields, $PostData, 'deleted', basename(__FILE__, '.php'))) AbortTest($CookieFile, 1);
 
 KwaMojaLogout($RootPath, $ServerPath, $CookieFile);
 unlink($CookieFile);
