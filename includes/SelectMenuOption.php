@@ -44,7 +44,6 @@ function GetDeletePage($Page, $IndexValue, $RootPath, $ServerPath, $CookieFile, 
 		if ($Link['value'] == 'Delete') {
 			$URLString = substr($Link['href'], strpos($Link['href'], "=") + 1);
 			$TypeCode = substr($URLString, 0, strlen($URLString) - 11);
-			echo $URLString.' '.$TypeCode.' '.$IndexValue."\n";
 			if ($TypeCode == $IndexValue) {
 				$DeletePage = ChooseURLOption($RootPath, $ServerPath, $CookieFile, $Link['href'], $TestNumber);
 			}
