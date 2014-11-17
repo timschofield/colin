@@ -29,6 +29,9 @@ class URLDetails {
 					error_log('**Warning** '.$Texts['text'][$k]['name'].' in '.$this->URL.' has no maxlength attribute set.'."\n\n", 3, '/home/tim/kwamoja'.date('Ymd').'.log');
 					$Texts['text'][$k]['maxlength'] = 10;
 				}
+				if (!isset($Texts['text'][$k]['minlength'])) {
+					$Texts['text'][$k]['minlength'] = 1;
+				}
 				$k++;
 			}
 		}

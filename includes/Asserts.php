@@ -4,7 +4,7 @@ global $db; // Make sure it IS global, regardless of our context
 
 $db = mysqli_connect('p:'.$Host, $DBUser, $DBPassword, $CompanyName, $DBPort);
 
-function assertDB($Table, $Fields, $PostData, $Mode) {
+function assertDB($Table, $Fields, $PostData, $Mode, $Test) {
 	global $db;
 	$SQL = "SELECT COUNT(*) FROM " . $Table . " WHERE ";
 	foreach ($Fields as $name=>$value) {
@@ -15,7 +15,7 @@ function assertDB($Table, $Fields, $PostData, $Mode) {
 	$Row = mysqli_fetch_row($Result);
 	if ($Row[0] == 0) {
 		$InputDump = print_r($PostData, true);
-		LogMessage(basename(__FILE__, '.php'), 2, 'Error in database ' . $Mode, $InputDump);
+		LogMessage($Test, 2, 'Error in database ' . $Mode, $InputDump);
 		unlink($CookieFile);
 		return false;
 	} else {
@@ -23,7 +23,7 @@ function assertDB($Table, $Fields, $PostData, $Mode) {
 	}
 }
 
-function assertNotDB($Table, $Fields, $PostData, $Mode) {
+function assertNotDB($Table, $Fields, $PostData, $Mode, $Test) {
 	global $db;
 	$SQL = "SELECT COUNT(*) FROM " . $Table . " WHERE ";
 	foreach ($Fields as $name=>$value) {
@@ -34,12 +34,17 @@ function assertNotDB($Table, $Fields, $PostData, $Mode) {
 	$Row = mysqli_fetch_row($Result);
 	if ($Row[0] > 0) {
 		$InputDump = print_r($PostData, true);
-		LogMessage(basename(__FILE__, '.php'), 2, 'Error in database ' . $Mode, $InputDump);
+		LogMessage($Test, 2, 'Error in database ' . $Mode, $InputDump);
 		unlink($CookieFile);
 		return false;
 	} else {
 		return true;
 	}
+}
+
+function AbortTest($CookieFile, $ReturnCode) {
+	unlink($CookieFile);
+	exit($ReturnCode);
 }
 
 ?>

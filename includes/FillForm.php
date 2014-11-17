@@ -1,8 +1,8 @@
 <?php
 
-function RandomASCIIString($MaxLength) {
+function RandomASCIIString($MinLength, $MaxLength) {
 	$Answer = '';
-	$Length = rand(1, $MaxLength);
+	$Length = rand($MinLength, $MaxLength);
 	for ($i=0; $i<$Length; $i++) {
 		$Answer .= chr(rand(32, 126));
 	}
@@ -38,9 +38,9 @@ function RandomNumberString($MaxLength) {
 	return $Answer;
 }
 
-function RandomAlphaNumericString($MaxLength) {
+function RandomAlphaNumericString($MinLength, $MaxLength) {
 	$Answer = '';
-	$Length = rand(1, $MaxLength);
+	$Length = rand($MinLength, $MaxLength);
 	for ($i=0; $i<$Length; $i++) {
 		$int = rand(0,61);
 		$a_z = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -65,9 +65,9 @@ function FillFormWithRandomData($FormDetails) {
 			} else if (isset($Field['class']) and $Field['class']=='email') {
 				$PostData[$Field['name']]=RandomEmailString($Field['maxlength']-6);
 			} else if (isset($Field['class']) and $Field['class']=='AlphaNumeric') {
-				$PostData[$Field['name']]=RandomAlphaNumericString($Field['maxlength']);
+				$PostData[$Field['name']]=RandomAlphaNumericString($Field['minlength'], $Field['maxlength']);
 			} else {
-				$PostData[$Field['name']]=RandomASCIIString($Field['maxlength']);
+				$PostData[$Field['name']]=RandomASCIIString($Field['minlength'], $Field['maxlength']);
 			}
 		}
 	}
