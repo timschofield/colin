@@ -1,6 +1,6 @@
 CREATE DATABASE IF NOT EXISTS `colin`;
 
-USE `colin
+USE `colin`
 
 CREATE TABLE IF NOT EXISTS `tests` (
   `testnumber` INT(11) NOT NULL DEFAULT 0,
