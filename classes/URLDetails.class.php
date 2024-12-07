@@ -239,7 +239,7 @@ class URLDetails {
 			$PostString .= $Key.'='.urlencode($Value).'&';
 		}
 		rtrim($PostString,'&');
-
+echo 'curl -s -b '.$this->SessionID.' -d "' . $PostString . '" "' . $this->URL . '"' , $FormArray."\n";
 		if (file_exists($this->SessionID)) {
 			exec('curl -s -b '.$this->SessionID.' -d "' . $PostString . '" "' . $this->URL . '"' , $FormArray);
 		} else {

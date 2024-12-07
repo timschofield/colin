@@ -1,4 +1,4 @@
-#!/usr/bin/php5
+#!/usr/bin/php8.3
 <?php
 error_reporting(E_ALL && ~E_WARNING);
 include('includes/config.php');
@@ -18,7 +18,7 @@ $Page=$SuppliersTypeInsertPage->FetchPage($RootPath, $ServerPath, basename(__FIL
 
 $Fields = array('typeid'=>FetchIndex($Page), 'typename'=>$PostData['TypeName']);
 
-if (!assertDB('suppliertype', $Fields, $PostData, 'inserted')) exit(1);
+if (!assertDB('suppliertype', $Fields, $PostData, 'inserted', 'SupplierType')) exit(1);
 
 $EditPage = GetEditPage($Page, $Fields['typeid'], $RootPath, $ServerPath, $CookieFile, basename(__FILE__, '.php'));
 
@@ -27,13 +27,14 @@ $SuppliersTypeUpdatePage = new URLDetails($CookieFile, $ServerPath.$EditPage[2][
 $Page=$SuppliersTypeUpdatePage->FetchPage($RootPath, $ServerPath, basename(__FILE__, '.php'));
 
 $Fields = array('typeid'=>$PostData['SelectedType'], 'typename'=>$PostData['TypeName']);
-if (!assertDB('suppliertype', $Fields, $PostData, 'updated')) exit(1);
+if (!assertDB('suppliertype', $Fields, $PostData, 'updated', 'SupplierType')) exit(1);
 
 $DeletePage = GetDeletePage($Page, $PostData['SelectedType'], $RootPath, $ServerPath, $CookieFile, basename(__FILE__, '.php'));
 
-if (!assertNotDB('suppliertype', $Fields, $PostData, 'deleted')) exit(1);
+if (!assertNotDB('suppliertype', $Fields, $PostData, 'deleted', 'SupplierType')) exit(1);
 
 KwaMojaLogout($RootPath, $ServerPath, $CookieFile);
+UpdateTest(2);
 unlink($CookieFile);
 LogMessage(basename(__FILE__, '.php'), 0, 'Test completed successfuly', '');
 exit(0);

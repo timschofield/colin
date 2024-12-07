@@ -1,4 +1,4 @@
-#!/usr/bin/php5
+#!/usr/bin/php8.3
 <?php
 
 $ModuleName = 'Manufacturing';
@@ -54,6 +54,7 @@ $DeletePage = GetDeletePage($Page, $PostData[$IndexFormField], $RootPath, $Serve
 if (!assertNotDB($TableName, $Fields, $PostData, 'deleted', basename(__FILE__, '.php'))) AbortTest($CookieFile, 1);
 
 KwaMojaLogout($RootPath, $ServerPath, $CookieFile);
+UpdateTest(3);
 unlink($CookieFile);
 LogMessage(basename(__FILE__, '.php'), 0, 'Test completed successfuly', '');
 exit(0);

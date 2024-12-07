@@ -1,4 +1,4 @@
-#!/usr/bin/php5
+#!/usr/bin/php8.3
 <?php
 
 $ModuleName = 'Setup';
@@ -46,12 +46,13 @@ foreach ($FieldNames as $DBField=>$FormField) {
 }
 
 if (!assertDB($TableName, $Fields, $PostData, 'updated', basename(__FILE__, '.php'))) AbortTest($CookieFile, 1);
-
+echo 'x'.$PostData[$IndexFormField].'x';
 $DeletePage = GetDeletePage($Page, $PostData[$IndexFormField], $RootPath, $ServerPath, $CookieFile, basename(__FILE__, '.php'));
 
 if (!assertNotDB($TableName, $Fields, $PostData, 'deleted', basename(__FILE__, '.php'))) AbortTest($CookieFile, 1);
 
 KwaMojaLogout($RootPath, $ServerPath, $CookieFile);
+UpdateTest(4);
 unlink($CookieFile);
 LogMessage(basename(__FILE__, '.php'), 0, 'Test completed successfuly', '');
 exit(0);

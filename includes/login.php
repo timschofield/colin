@@ -53,7 +53,6 @@ function KwaMojaLogIn($CookieFile, $RootPath, $ServerPath, $Company, $UserName, 
 	$IndexScreenDetails = new URLDetails($CookieFile, $RootPath.'index.php', $PostArray);
 	$IndexPage=$IndexScreenDetails->FetchPage($RootPath, $ServerPath, $TestNumber);
 
-
 	return $IndexPage;
 }
 

@@ -1,4 +1,4 @@
-#!/usr/bin/php5
+#!/usr/bin/php8.3
 <?php
 error_reporting(E_ALL && ~E_WARNING);
 
@@ -49,7 +49,7 @@ $Fields = array('typeabbrev'=>$PostData['TypeAbbrev'], 'sales_type'=>$PostData['
 /* Test that the database contains the correct record and if it fails
  * then abort the test with and exit code of 1
  */
-if (!assertDB('salestypes', $Fields, $PostData, 'inserted')) exit(1);
+if (!assertDB('salestypes', $Fields, $PostData, 'inserted', 'SalesTypes')) exit(1);
 
 /* Find the link to edit the sales type just entered and fetch
  * that page
@@ -77,7 +77,7 @@ $Fields = array('typeabbrev'=>$PostData['TypeAbbrev'], 'sales_type'=>$PostData['
 /* Test that the database contains the correct record and if it fails
  * then abort the test with and exit code of 1
  */
-if (!assertDB('salestypes', $Fields, $PostData, 'updated')) exit(1);
+if (!assertDB('salestypes', $Fields, $PostData, 'updated', 'SalesTypes')) exit(1);
 
 /* Find the link to delete the sales type just entered and fetch
  * that page
@@ -87,12 +87,13 @@ $DeletePage = GetDeletePage($Page, $PostData['TypeAbbrev'], $RootPath, $ServerPa
 /* Test that the database does not contain the record and if it fails
  * then abort the test with and exit code of 1
  */
-if (!assertNotDB('salestypes', $Fields, $PostData, 'deleted')) exit(1);
+if (!assertNotDB('salestypes', $Fields, $PostData, 'deleted','SalesTypes')) exit(1);
 
 /* Logout of the KwaMoja instance, delete the cookie file
  * and exit with a 0 response code
  */
 KwaMojaLogout($RootPath, $ServerPath, $CookieFile);
+UpdateTest(0);
 unlink($CookieFile);
 LogMessage(basename(__FILE__, '.php'), 0, 'Test completed successfuly', '');
 exit(0);

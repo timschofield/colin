@@ -12,6 +12,7 @@ function ChooseMenuOption($RootPath, $ServerPath, $CookieFile, $IndexPage, $Menu
 	}
 
 	$SelectedPage = new URLDetails($CookieFile, $ServerPath.$IndexPage[1][$i]['href'], array());
+
 	$Page=$SelectedPage->FetchPage($RootPath, $ServerPath, $TestNumber);
 
 	return $Page;
@@ -41,8 +42,10 @@ function GetEditPage($Page, $IndexValue, $RootPath, $ServerPath, $CookieFile, $T
 
 function GetDeletePage($Page, $IndexValue, $RootPath, $ServerPath, $CookieFile, $TestNumber) {
 	foreach($Page[3] as $Link) {
+//		var_dump($Link);
 		if ($Link['value'] == 'Delete') {
 			$URLString = substr($Link['href'], strpos($Link['href'], "=") + 1);
+			echo "\n".$URLString;
 			$TypeCode = substr($URLString, 0, strlen($URLString) - 11);
 			if ($TypeCode == $IndexValue) {
 				$DeletePage = ChooseURLOption($RootPath, $ServerPath, $CookieFile, $Link['href'], $TestNumber);

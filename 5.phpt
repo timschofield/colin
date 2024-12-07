@@ -1,4 +1,4 @@
-#!/usr/bin/php5
+#!/usr/bin/php8.3
 <?php
 
 $ModuleName = 'Setup';

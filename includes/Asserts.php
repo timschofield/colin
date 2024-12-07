@@ -1,8 +1,11 @@
 <?php
 
 global $db; // Make sure it IS global, regardless of our context
-
 $db = mysqli_connect('p:'.$Host, $DBUser, $DBPassword, $CompanyName, $DBPort);
+
+global $LogDB; // Make sure it IS global, regardless of our context
+$LogDB = mysqli_connect('p:'.$Host, $DBUser, $DBPassword, 'colin', $DBPort);
+
 
 function assertDB($Table, $Fields, $PostData, $Mode, $Test) {
 	global $db;
@@ -45,6 +48,12 @@ function assertNotDB($Table, $Fields, $PostData, $Mode, $Test) {
 function AbortTest($CookieFile, $ReturnCode) {
 	unlink($CookieFile);
 	exit($ReturnCode);
+}
+
+function UpdateTest($TestNo) {
+	global $LogDB;
+	$SQL = "UPDATE tests SET lastrun=NOW() WHERE testnumber=" . $TestNo . "";
+	$Result = mysqli_query($LogDB, $SQL);
 }
 
 ?>

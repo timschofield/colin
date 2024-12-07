@@ -1,4 +1,4 @@
-#!/usr/bin/php5
+#!/usr/bin/php8.3
 <?php
 error_reporting(E_ALL && ~E_WARNING);
 
@@ -27,7 +27,7 @@ $SetupPage = FindModule($RootPath, $ServerPath, $CookieFile, $IndexPage, 'Setup'
 $CustomersTypePage = ChooseMenuOption($RootPath, $ServerPath, $CookieFile, $SetupPage, 'Customer Types', basename(__FILE__, '.php'));
 
 /* As this is a generalised test rather than a specific
- * edge casewe want to use randomised data so we fill
+ * edge case we want to use randomised data so we fill
  * the form with the random data
  */
 $PostData = FillFormWithRandomData($CustomersTypePage[2]);
@@ -47,7 +47,7 @@ $Fields = array('typeid'=>FetchIndex($Page), 'typename'=>$PostData['TypeName']);
 /* Test that the database contains the correct record and if it fails
  * then abort the test with and exit code of 1
  */
-if (!assertDB('debtortype', $Fields, $PostData, 'inserted')) exit(1);
+if (!assertDB('debtortype', $Fields, $PostData, 'inserted', 'SalesType')) exit(1);
 
 /* Find the link to edit the customer type just entered and fetch
  * that page
@@ -71,18 +71,19 @@ $Page=$CustomersTypeUpdatePage->FetchPage($RootPath, $ServerPath, basename(__FIL
  * for all fields being updated by this script
  */
 $Fields = array('typeid'=>$PostData['SelectedType'], 'typename'=>$PostData['TypeName']);
-if (!assertDB('debtortype', $Fields, $PostData, 'updated')) exit(1);
+if (!assertDB('debtortype', $Fields, $PostData, 'updated', 'SalesType')) exit(1);
 
 $DeletePage = GetDeletePage($Page, $PostData['SelectedType'], $RootPath, $ServerPath, $CookieFile, basename(__FILE__, '.php'));
 /* Test that the database does not contain the record and if it fails
  * then abort the test with and exit code of 1
  */
-if (!assertNotDB('debtortype', $Fields, $PostData, 'deleted')) exit(1);
+if (!assertNotDB('debtortype', $Fields, $PostData, 'deleted', 'SalesType')) exit(1);
 
 /* Logout of the KwaMoja instance, delete the cookie file
  * and exit with a 0 response code
  */
 KwaMojaLogout($RootPath, $ServerPath, $CookieFile);
+UpdateTest(1);
 unlink($CookieFile);
 LogMessage(basename(__FILE__, '.php'), 0, 'Test completed successfuly', '');
 exit(0);

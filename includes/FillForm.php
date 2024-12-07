@@ -6,11 +6,17 @@ function RandomASCIIString($MinLength, $MaxLength) {
 	for ($i=0; $i<$Length; $i++) {
 		$Answer .= chr(rand(32, 126));
 	}
-	$Answer = str_replace('`', '', $Answer);
-	$Answer = str_replace('"', '', $Answer);
-	$Answer = str_replace('&', '', $Answer);
-	$Answer = str_replace('$', '', $Answer);
-	$Answer[1]= chr(96);
+	$Answer = str_replace('`', 'x', $Answer);
+	$Answer = str_replace('"', 'x', $Answer);
+	$Answer = str_replace('&', 'x', $Answer);
+	$Answer = str_replace('$', 'x', $Answer);
+	$Answer = str_replace('>', 'x', $Answer);
+	$Answer = str_replace('<', 'x', $Answer);
+	$Answer = str_replace(':', 'x', $Answer);
+	$Answer = str_replace('-', 'x', $Answer);
+	$Answer = str_replace("'", 'x', $Answer);
+	$Answer = str_replace("^", 'x', $Answer);
+	if($Answer[0] == '(') { $Answer[0]='x';}
 	return $Answer;
 }
 
@@ -55,7 +61,10 @@ function FillFormWithRandomData($FormDetails) {
 	foreach ($FormDetails['Texts'] as $Name=>$Value) {
 		foreach ($Value as $Field) {
 			if (isset($Field['class']) and $Field['class']=='number') {
-				$PostData[$Field['name']]=RandomNumberString($Field['maxlength']);
+				if (!isset($Field['maxvalue'])) {
+					$Field['maxvalue'] = str_pad('', $Field['maxlength'], '9');
+				}
+				$PostData[$Field['name']]=RandomNumberString($Field['maxlength'], $Field['maxvalue']);
 			} else if (isset($Field['class']) and $Field['class']=='integer') {
 				if (!isset($Field['maxvalue'])) {
 					$Field['maxvalue'] = str_pad('', $Field['maxlength'], '9');
@@ -88,6 +97,7 @@ function FillFormWithRandomData($FormDetails) {
 			$PostData[$Field['name']]=$Field['value'];
 		}
 	}
+
 	return $PostData;
 }
 
