@@ -6,7 +6,7 @@ error_reporting(E_ALL && ~E_WARNING);
  */
 include('includes/config.php');
 
-RegisterTest(basename(__FILE__, '.php'), 'Sales types general data test');
+RegisterTest(basename(__FILE__, '.phpt'), 'Sales types general data test');
 
 /* Create a random number identifier to hold the
  * client side cookie file for this session.
@@ -15,7 +15,7 @@ $CookieFile = sha1(uniqid(mt_rand(), true));
 
 /* Log into webERP and retrieve  the first index page
  */
-$IndexPage = webERPLogIn($CookieFile, $RootPath, $ServerPath, $CompanyName, $UserName, $Password, basename(__FILE__, '.php'));
+$IndexPage = webERPLogIn($CookieFile, $RootPath, $ServerPath, $CompanyName, $UserName, $Password, basename(__FILE__, 'phpt'));
 
 /* Move to the menu page we are looking for, in this case 'Setup'
  * Note this test assumes that the user whose details are in
@@ -26,7 +26,7 @@ $SetupPage = FindModule($RootPath, $ServerPath, $CookieFile, $IndexPage, 'Setup'
 /* Select the option for the menu item we wish to test and download
  * the page.
  */
-$SalesTypePage = ChooseMenuOption($RootPath, $ServerPath, $CookieFile, $SetupPage, 'Sales Types', basename(__FILE__, '.php'));
+$SalesTypePage = ChooseMenuOption($RootPath, $ServerPath, $CookieFile, $SetupPage, 'Sales Types', basename(__FILE__, '.phpt'));
 
 /* As this is a generalised test rather than a specific
  * edge casewe want to use randomised data so we fill
@@ -49,7 +49,7 @@ $Fields = array('typeabbrev'=>$PostData['TypeAbbrev'], 'sales_type'=>$PostData['
 /* Test that the database contains the correct record and if it fails
  * then abort the test with and exit code of 1
  */
-if (!assertDB('salestypes', $Fields, $PostData, 'inserted', 'SalesTypes')) exit(1);
+if (!assertDB('salestypes', $Fields, $PostData, 'inserted', 0)) exit(1);
 
 /* Find the link to edit the sales type just entered and fetch
  * that page
