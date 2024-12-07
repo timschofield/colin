@@ -5,7 +5,7 @@ include('includes/config.php');
 RegisterTest(basename(__FILE__, '.php'), 'Supplier types general data test');
 $CookieFile = sha1(uniqid(mt_rand(), true));
 
-$IndexPage=KwaMojaLogIn($CookieFile, $RootPath, $ServerPath, $CompanyName, $UserName, $Password, basename(__FILE__, '.php'));
+$IndexPage=webERPLogIn($CookieFile, $RootPath, $ServerPath, $CompanyName, $UserName, $Password, basename(__FILE__, '.php'));
 
 $SetupPage=FindModule($RootPath, $ServerPath, $CookieFile, $IndexPage, 'Setup');
 
@@ -33,7 +33,7 @@ $DeletePage = GetDeletePage($Page, $PostData['SelectedType'], $RootPath, $Server
 
 if (!assertNotDB('suppliertype', $Fields, $PostData, 'deleted', 'SupplierType')) exit(1);
 
-KwaMojaLogout($RootPath, $ServerPath, $CookieFile);
+webERPLogout($RootPath, $ServerPath, $CookieFile);
 UpdateTest(2);
 unlink($CookieFile);
 LogMessage(basename(__FILE__, '.php'), 0, 'Test completed successfuly', '');

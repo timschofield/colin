@@ -11,9 +11,9 @@ RegisterTest(basename(__FILE__, '.php'), 'Customer types general data test');
  */
 $CookieFile = sha1(uniqid(mt_rand(), true));
 
-/* Log into KwaMoja and retrieve  the first index page
+/* Log into webERP and retrieve  the first index page
  */
-$IndexPage = KwaMojaLogIn($CookieFile, $RootPath, $ServerPath, $CompanyName, $UserName, $Password, basename(__FILE__, '.php'));
+$IndexPage = webERPLogIn($CookieFile, $RootPath, $ServerPath, $CompanyName, $UserName, $Password, basename(__FILE__, '.php'));
 
 /* Move to the menu page we are looking for, in this case 'Setup'
  * Note this test assumes that the user whose details are in
@@ -79,10 +79,10 @@ $DeletePage = GetDeletePage($Page, $PostData['SelectedType'], $RootPath, $Server
  */
 if (!assertNotDB('debtortype', $Fields, $PostData, 'deleted', 'SalesType')) exit(1);
 
-/* Logout of the KwaMoja instance, delete the cookie file
+/* Logout of the webERP instance, delete the cookie file
  * and exit with a 0 response code
  */
-KwaMojaLogout($RootPath, $ServerPath, $CookieFile);
+webERPLogout($RootPath, $ServerPath, $CookieFile);
 UpdateTest(1);
 unlink($CookieFile);
 LogMessage(basename(__FILE__, '.php'), 0, 'Test completed successfuly', '');

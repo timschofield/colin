@@ -1,6 +1,6 @@
 <?php
 
-function KwaMojaLogIn($CookieFile, $RootPath, $ServerPath, $Company, $UserName, $Password, $TestNumber) {
+function webERPLogIn($CookieFile, $RootPath, $ServerPath, $Company, $UserName, $Password, $TestNumber) {
 
 	$LoginScreenDetails = new URLDetails($CookieFile, $RootPath.'index.php', array());
 	$LoginScreenDetails->FetchPage($RootPath, $ServerPath, $TestNumber);
@@ -56,7 +56,7 @@ function KwaMojaLogIn($CookieFile, $RootPath, $ServerPath, $Company, $UserName, 
 	return $IndexPage;
 }
 
-function KwaMojaLogout($RootPath, $ServerPath, $CookieFile) {
+function webERPLogout($RootPath, $ServerPath, $CookieFile) {
 	$IndexScreenDetails = new URLDetails($CookieFile, $RootPath.'Logout.php', array());
 	$IndexPage=$IndexScreenDetails->FetchPage($RootPath, $ServerPath, basename(__FILE__, '.php'));
 }

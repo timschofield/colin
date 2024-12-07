@@ -7,7 +7,7 @@ function ChooseMenuOption($RootPath, $ServerPath, $CookieFile, $IndexPage, $Menu
 	} while ($i<sizeOf($IndexPage[1]) and substr($IndexPage[1][$i]['value'],4) != $MenuOption);
 
 	if ($i>=sizeOf($IndexPage[1])) {
-		error_log('Error finding option '.$MenuOption.'. Link not found.'."\n", 3, '/home/tim/kwamoja'.date('Ymd').'.log');
+		error_log('Error finding option '.$MenuOption.'. Link not found.'."\n", 3, '/home/tim/weberp'.date('Ymd').'.log');
 		return false;
 	}
 

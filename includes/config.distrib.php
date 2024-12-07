@@ -1,10 +1,10 @@
 <?php
 
-$RootPath='http://localhost/KwaMoja/';
+$RootPath='http://localhost/webERP/';
 $ServerPath='http://localhost/';
-$CompanyName='kwamoja';
+$CompanyName='weberp';
 $UserName='admin';
-$Password='kwamoja';
+$Password='weberp';
 
 $Host = 'localhost';
 $DBPort = 3306;

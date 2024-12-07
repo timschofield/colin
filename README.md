@@ -1,4 +1,4 @@
 colin
 =====
 
-Testing suite for KwaMoja
+Testing suite for webERP

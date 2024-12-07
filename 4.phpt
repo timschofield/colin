@@ -17,7 +17,7 @@ include('includes/config.php');
 RegisterTest(basename(__FILE__, '.php'), $TestName);
 $CookieFile = sha1(uniqid(mt_rand(), true));
 
-$IndexPage=KwaMojaLogIn($CookieFile, $RootPath, $ServerPath, $CompanyName, $UserName, $Password, basename(__FILE__, '.php'));
+$IndexPage=webERPLogIn($CookieFile, $RootPath, $ServerPath, $CompanyName, $UserName, $Password, basename(__FILE__, '.php'));
 
 $MenuPage=FindModule($RootPath, $ServerPath, $CookieFile, $IndexPage, $ModuleName);
 
@@ -51,7 +51,7 @@ $DeletePage = GetDeletePage($Page, $PostData[$IndexFormField], $RootPath, $Serve
 
 if (!assertNotDB($TableName, $Fields, $PostData, 'deleted', basename(__FILE__, '.php'))) AbortTest($CookieFile, 1);
 
-KwaMojaLogout($RootPath, $ServerPath, $CookieFile);
+webERPLogout($RootPath, $ServerPath, $CookieFile);
 UpdateTest(4);
 unlink($CookieFile);
 LogMessage(basename(__FILE__, '.php'), 0, 'Test completed successfuly', '');

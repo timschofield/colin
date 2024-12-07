@@ -26,7 +26,7 @@ class URLDetails {
 					$Texts['text'][$k][$name]=(string)$Result->item($i)->attributes->getNamedItem($name)->nodeValue;
 				}
 				if (!isset($Texts['text'][$k]['maxlength'])) {
-					error_log('**Warning** '.$Texts['text'][$k]['name'].' in '.$this->URL.' has no maxlength attribute set.'."\n\n", 3, '/home/tim/kwamoja'.date('Ymd').'.log');
+					error_log('**Warning** '.$Texts['text'][$k]['name'].' in '.$this->URL.' has no maxlength attribute set.'."\n\n", 3, '/home/tim/weberp'.date('Ymd').'.log');
 					$Texts['text'][$k]['maxlength'] = 10;
 				}
 				if (!isset($Texts['text'][$k]['minlength'])) {
@@ -206,7 +206,7 @@ class URLDetails {
 		$Validator = new XhtmlValidator();
 		$Result=$Validator->validate($html);
 		if($Validator->validate($html) === false){
-			error_log('**Error**'.'There are errors in the XHTML of page '.$this->URL."\n", 3, '/home/tim/kwamoja'.date('Ymd').'.log');
+			error_log('**Error**'.'There are errors in the XHTML of page '.$this->URL."\n", 3, '/home/tim/weberp'.date('Ymd').'.log');
 			$Validator->logErrors();
 		}
 		return $Result;
@@ -221,7 +221,7 @@ class URLDetails {
 					exec('curl -ILs -b '.$this->SessionID.' '.$ServerPath.$this->Links[$i]['href'], $Output);
 				}
 				if (strstr($Output[0], '404')) {
-					error_log('**Warning**'.$i.' '.$ServerPath.$this->Links[$i]['href'].' '.$Output[0]."\n", 3, '/home/tim/kwamoja'.date('Ymd').'.log');
+					error_log('**Warning**'.$i.' '.$ServerPath.$this->Links[$i]['href'].' '.$Output[0]."\n", 3, '/home/tim/weberp'.date('Ymd').'.log');
 				}
 			}
 		}
